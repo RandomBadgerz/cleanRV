@@ -188,7 +188,7 @@ if uploaded_files:
                 # Add checkbox in the first column
                 with col_checkbox:
                     st.session_state.checkbox_states[col] = st.checkbox(
-                        f"Include: {col}",
+                        f"{col}",
                         value=st.session_state.checkbox_states[col]  # Persist checkbox state in session_state
                     )
 
@@ -196,11 +196,11 @@ if uploaded_files:
                 with col_textbox:
                     # Only show text input if the column is selected
                     if st.session_state.checkbox_states[col]:
-                        st.session_state.rename_columns[col] = st.text_input("",
+                        st.session_state.rename_columns[col] = st.text_input("temp",
                                                                              value=st.session_state.rename_columns[col],
                                                                              # Persist text input value in session_state
-                                                                             key=f"text_input_{col}"
-                                                                             # Ensure unique key for each text input
+                                                                             key=f"text_input_{col}", # Ensure unique key for each text input
+                                                                             label_visibility="hidden"  # Hide the label
                                                                              )
 
                 # Collect the selected column and its new name (if applicable)
