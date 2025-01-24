@@ -149,7 +149,7 @@ if uploaded_files:
 
             # extract customer tags into new column (Category, Message Type)
             cleaned_df['category'] = cleaned_df['tags_customer'].str.extract(r'category/([^,]+)')
-            cleaned_df['message_type'] = cleaned_df['tags_customer'].str.extract(r'Message Type/([^,]+)')
+            #cleaned_df['message_type'] = cleaned_df['tags_customer'].str.extract(r'Message Type/([^,]+)')
             st.session_state.cleaned_df = cleaned_df
 
 
@@ -157,7 +157,7 @@ if uploaded_files:
             st.subheader("Select Columns to Include and Optionally Rename Them")
 
             columns = list(cleaned_df.columns)
-            default_column = ['url', 'published','content','sentiment','source_type','category','message_type','user','engagement']
+            default_column = ['url', 'published','content','sentiment','source_type','category','extra_source_attributes.name','engagement']
             # Placeholder for renaming and selection
             selected_columns = []
 
