@@ -131,7 +131,7 @@ if uploaded_files:
 
             # create source_dict
             source_dict = {
-                'SOCIALMEDIA,SOCIALMEDIA_TWITTER': 'Twitter',
+                'SOCIALMEDIA,SOCIALMEDIA_TWITTER': 'X (Twitter)',
                 'SOCIALMEDIA,SOCIALMEDIA_FACEBOOK': 'Facebook',
                 'SOCIALMEDIA,SOCIALMEDIA_YOUTUBE': 'Youtube',
                 'SOCIALMEDIA,SOCIALMEDIA_INSTAGRAM': 'Instagram',
