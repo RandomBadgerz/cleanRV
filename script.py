@@ -109,47 +109,64 @@ if uploaded_files:
             #create final cleaned df based on the combined df
             cleaned_df = combined_df
 
-            # Extract only the date
-            cleaned_df['published'] = cleaned_df['published'].dt.date
+            if 'published' in cleaned_df.columns:
+                # Extract only the date
+                cleaned_df['published'] = cleaned_df['published'].dt.date
 
-            # filter non-checked row out
-            cleaned_df = cleaned_df[cleaned_df["tags_marking"].str.contains("checked", na=False)]
-            # filter hid row out
-            cleaned_df = cleaned_df[~cleaned_df["tags_customer"].str.contains("Hide/hide", na=False)]
+            if 'tags_marking' in cleaned_df.columns:
+                # filter non-checked row out
+                cleaned_df = cleaned_df[cleaned_df["tags_marking"].str.contains("checked", na=False)]
 
-            # add title to message
-            cleaned_df['content'] = combined_df['title'].fillna('') + ' ' + cleaned_df['content'].fillna('')
-            # cut content length to 750
-            cleaned_df['content'] = cleaned_df['content'].str[:750]
-            # cut url length to 750
-            cleaned_df['url'] = cleaned_df['url'].str[:750]
+            if 'tags_customer' in cleaned_df.columns:
+                # filter hid row out
+                cleaned_df = cleaned_df[~cleaned_df["tags_customer"].str.contains("Hide/hide", na=False)]
 
-            # replace sentiment value
-            cleaned_df['sentiment'] = cleaned_df['sentiment'].replace(5, 'Positive')
-            cleaned_df['sentiment'] = cleaned_df['sentiment'].replace(0, 'Neutral')
-            cleaned_df['sentiment'] = cleaned_df['sentiment'].replace(-5, 'Negative')
+            if 'content' in cleaned_df.columns and 'title' in cleaned_df.columns:
+                # add title to message
+                cleaned_df['content'] = combined_df['title'].fillna('') + ' ' + cleaned_df['content'].fillna('')
+                # cut content length to 750
+                cleaned_df['content'] = cleaned_df['content'].str[:750]
 
-            # create source_dict
-            source_dict = {
-                'SOCIALMEDIA,SOCIALMEDIA_TWITTER': 'X (Twitter)',
-                'SOCIALMEDIA,SOCIALMEDIA_FACEBOOK': 'Facebook',
-                'SOCIALMEDIA,SOCIALMEDIA_YOUTUBE': 'Youtube',
-                'SOCIALMEDIA,SOCIALMEDIA_INSTAGRAM': 'Instagram',
-                'ONLINENEWS,ONLINENEWS_OTHER': 'OnlineNews',
-                'ONLINENEWS,ONLINENEWS_NEWSPAPER': 'OnlineNews',
-                'BLOG,BLOG_OTHER': 'Blog',
-                'ONLINENEWS,ONLINENEWS_PRESSRELEASES': 'PressReleases',
-                'ONLINENEWS,ONLINENEWS_BLOG': 'Blog',
-                'ONLINENEWS,ONLINENEWS_TVRADIO': 'TVRadio'
-            }
+            if 'url' in cleaned_df.columns:
+                # cut url length to 750
+                cleaned_df['url'] = cleaned_df['url'].str[:750]
 
-            # loop to change i in source_type to source dict accordingly
-            for i in source_dict:
-                cleaned_df['source_type'] = cleaned_df['source_type'].replace(i, source_dict[i])
+            if 'sentiment' in cleaned_df.columns:
+                # replace sentiment value
+                cleaned_df['sentiment'] = cleaned_df['sentiment'].replace(5, 'Positive')
+                cleaned_df['sentiment'] = cleaned_df['sentiment'].replace(0, 'Neutral')
+                cleaned_df['sentiment'] = cleaned_df['sentiment'].replace(-5, 'Negative')
 
-            # extract customer tags into new column (Category, Message Type)
-            cleaned_df['category'] = cleaned_df['tags_customer'].str.extract(r'category/([^,]+)')
+            if 'source_type' in cleaned_df.columns:
+                # create source_dict
+                source_dict = {
+                    'SOCIALMEDIA,SOCIALMEDIA_TWITTER': 'X',
+                    'SOCIALMEDIA,SOCIALMEDIA_FACEBOOK': 'Facebook',
+                    'SOCIALMEDIA,SOCIALMEDIA_YOUTUBE': 'Youtube',
+                    'SOCIALMEDIA,SOCIALMEDIA_INSTAGRAM': 'Instagram',
+                    'ONLINENEWS,ONLINENEWS_OTHER': 'Website',
+                    'ONLINENEWS,ONLINENEWS_NEWSPAPER': 'Website',
+                    'BLOG,BLOG_OTHER': 'Website',
+                    'ONLINENEWS,ONLINENEWS_PRESSRELEASES': 'Website',
+                    'ONLINENEWS,ONLINENEWS_BLOG': 'Website',
+                    'ONLINENEWS,ONLINENEWS_TVRADIO': 'Website',
+                    'ONLINENEWS,ONLINENEWS_MAGAZINE': 'Website',
+                    'SOCIALMEDIA,SOCIALMEDIA_LINEOA': 'Website',
+                    'PODCAST,PODCAST_OTHER': 'Website',
+                    'MESSAGEBOARD,MESSAGEBOARD_OTHER': 'Webboard',
+                    'MESSAGEBOARD,MESSAGEBOARD_REDDIT': 'Webboard',
+                }
+
+                # loop to change i in source_type to source dict accordingly
+                for i in source_dict:
+                    cleaned_df['source_type'] = cleaned_df['source_type'].replace(i, source_dict[i])
+
+            if 'tags_customer' in cleaned_df.columns:
+                # extract customer tags into new column (Category, Message Type)
+                cleaned_df['category'] = cleaned_df['tags_customer'].str.extract(r'category/([^,]+)')
             #cleaned_df['message_type'] = cleaned_df['tags_customer'].str.extract(r'Message Type/([^,]+)')
+
+            # put cleaned_df in session so it does not reset
             st.session_state.cleaned_df = cleaned_df
 
 
