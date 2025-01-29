@@ -232,8 +232,8 @@ if uploaded_files:
                 # Apply renaming to the DataFrame
                 rename_mapping = {col: st.session_state.rename_columns[col] for col in selected_columns}
                 filtered_df = cleaned_df[selected_columns].rename(columns=rename_mapping)
-                st.write("Filtered Combined DataFrame (With Renamed Columns):")
-                st.dataframe(filtered_df)
+                st.write("Sameple Result (With Renamed Columns):")
+                st.dataframe(filtered_df.head(20))
             else:
                 st.warning("No columns selected! Please select at least one column!")
 
