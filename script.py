@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import io
+import re
 
 # Set page configuration for wider layout
 st.set_page_config(
@@ -161,11 +162,25 @@ if uploaded_files:
                 for i in source_dict:
                     cleaned_df['source_type'] = cleaned_df['source_type'].replace(i, source_dict[i])
 
+            #create column for each tags in tags_customer
             if 'tags_customer' in cleaned_df.columns:
-                # extract customer tags into new column (Category, Message Type)
-                cleaned_df['category'] = cleaned_df['tags_customer'].str.extract(r'category/([^,]+)')
-            #cleaned_df['message_type'] = cleaned_df['tags_customer'].str.extract(r'Message Type/([^,]+)')
+                #collect all headtags
+                new_column_header = []
+                for row in cleaned_df['tags_customer']:
+                    new_column_header.extend(re.findall(r'(?:^|,)([^/]+)', row))
 
+                #remove duplicate
+                new_column_header = list(set(new_column_header))
+
+                #create column and add corresponding tag
+                for column in new_column_header:
+                    cleaned_df[column] = cleaned_df['tags_customer'].str.findall(r'{}/([^,]+)'.format(column)).apply(
+                        ', '.join)
+
+            #clean column name
+            cleaned_df.columns = cleaned_df.columns.str.strip()
+            cleaned_df.columns = cleaned_df.columns.str.lower()
+            cleaned_df.columns = cleaned_df.columns.str.replace(' ', '_')
             # put cleaned_df in session so it does not reset
             st.session_state.cleaned_df = cleaned_df
 
@@ -174,16 +189,21 @@ if uploaded_files:
             st.subheader("Select Columns to Include and Optionally Rename Them")
 
             columns = list(cleaned_df.columns)
-            default_column = ['url', 'published','content','sentiment','source_type','category','extra_source_attributes.name','engagement']
+            default_column = ['url', 'published','content','sentiment','source_type','category', 'extra_source_attributes.name','engagement']
+
+            default_column = [item.strip() for item in default_column]
+            default_column = [item.replace(" ", "_") for item in default_column]
+            default_column = [item.lower() for item in default_column]
+
             # Placeholder for renaming and selection
             selected_columns = []
 
             # Check if the column name is in the mapping dict and set checkbox to True if matched
             column_name_mapping_dict = {
                 'published': 'date',
-                'content': 'message',
                 'source_type': 'channel',
-                'extra_source_attributes.name': 'user'
+                'extra_source_attributes.name': 'username',
+                'engagement': 'total_engagement'
             }
             # For each column in the DataFrame
             for col in columns:
