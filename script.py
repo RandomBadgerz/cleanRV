@@ -203,7 +203,7 @@ if uploaded_files:
                 'published': 'date',
                 'source_type': 'channel',
                 'extra_source_attributes.name': 'username',
-                'engagement': 'total_engagement'
+                'engagement': 'total_engagement',
                 'content': 'message'
             }
             # For each column in the DataFrame
