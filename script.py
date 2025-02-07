@@ -204,7 +204,6 @@ if uploaded_files:
                 'source_type': 'channel',
                 'extra_source_attributes.name': 'username',
                 'engagement': 'total_engagement',
-                'content': 'message'
             }
             # For each column in the DataFrame
             for col in columns:
