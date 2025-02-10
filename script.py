@@ -1,7 +1,8 @@
-import streamlit as st
-import pandas as pd
 import io
 import re
+
+import pandas as pd
+import streamlit as st
 
 # Set page configuration for wider layout
 st.set_page_config(
@@ -11,7 +12,13 @@ st.set_page_config(
 )
 
 # Title and header
-st.title("RealVision Cleaning App")
+col1, col2 = st.columns([1, 11])  # Two columns, adjust width ratio as needed
+
+with col1:
+    st.image("rvlogo.png", width=100)  # Adjust 'width' to reduce the size
+
+with col2:
+    st.title("RealVision Cleaning App")
 st.header("Upload Multiple Files, Select and Rename Columns, and Combine Them")
 
 # Initialize session state to store the combined DataFrame, checkbox states, and column rename mappings
