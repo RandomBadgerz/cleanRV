@@ -17,8 +17,11 @@ col1, col2 = st.columns([1, 11])  # Two columns, adjust width ratio as needed
 with col1:
     st.image("rvlogo.png", width=100)  # Adjust 'width' to reduce the size
 
-with col2:
-    st.title("RealVision Cleaning App")
+    with col2:
+        st.markdown(
+            '<h1 style="background: linear-gradient(45deg, #f9e289, red); -webkit-background-clip: text; color: transparent; font-weight: bold;">RealVision Cleaning App</h1>',
+            unsafe_allow_html=True
+        )
 st.header("Upload Multiple Files, Select and Rename Columns, and Combine Them")
 
 # Initialize session state to store the combined DataFrame, checkbox states, and column rename mappings
