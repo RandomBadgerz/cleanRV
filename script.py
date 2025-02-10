@@ -19,7 +19,7 @@ with col1:
 
     with col2:
         st.markdown(
-            '<h1 style="background: linear-gradient(45deg, #f9e289, red); -webkit-background-clip: text; color: transparent; font-weight: bold;">RealVision Cleaning App</h1>',
+            '<h1 style="background: linear-gradient(to right, #fec76f, red); -webkit-background-clip: text; color: transparent; font-weight: bold;">RealVision Cleaning App</h1>',
             unsafe_allow_html=True
         )
 st.header("Upload Multiple Files, Select and Rename Columns, and Combine Them")
