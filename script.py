@@ -166,6 +166,7 @@ if uploaded_files:
                     'PODCAST,PODCAST_OTHER': 'Website',
                     'MESSAGEBOARD,MESSAGEBOARD_OTHER': 'Webboard',
                     'MESSAGEBOARD,MESSAGEBOARD_REDDIT': 'Webboard',
+                    'ONLINENEWS,ONLINENEWS_AGENCY': 'Website'
                 }
 
                 # loop to change i in source_type to source dict accordingly
