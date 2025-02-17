@@ -175,18 +175,24 @@ if uploaded_files:
 
             #create column for each tags in tags_customer
             if 'tags_customer' in cleaned_df.columns:
+                # Convert all non-string values to string
+                cleaned_df['tags_customer'] = cleaned_df['tags_customer'].apply(lambda x: str(x) if not isinstance(x, str) else x)
+
                 #collect all headtags
                 new_column_header = []
                 for row in cleaned_df['tags_customer']:
-                    new_column_header.extend(re.findall(r'(?:^|,)([^/]+)', row))
+                    if row is not None and row != "" and isinstance(row, str):
+                        new_column_header.extend(re.findall(r'(?:^|,)([^/]+)', row))
+
 
                 #remove duplicate
                 new_column_header = list(set(new_column_header))
 
-                #create column and add corresponding tag
+                # Handle null values and create columns with corresponding tags
                 for column in new_column_header:
-                    cleaned_df[column] = cleaned_df['tags_customer'].str.findall(r'{}/([^,]+)'.format(column)).apply(
-                        ', '.join)
+                    cleaned_df[column] = cleaned_df['tags_customer'] \
+                        .str.findall(r'{}/([^,]+)'.format(column)) \
+                        .apply(lambda x: ', '.join(x) if isinstance(x, list) else '')
 
             #clean column name
             cleaned_df.columns = cleaned_df.columns.str.strip()
